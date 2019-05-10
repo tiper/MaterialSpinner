@@ -1,0 +1,24 @@
+<resources>
+    <style name="AppTheme" parent="Theme.AppCompat.Light.DarkActionBar">
+        <item name="colorPrimary">@color/colorPrimary</item>
+        <item name="colorPrimaryDark">@color/colorPrimaryDark</item>
+        <item name="colorAccent">@color/colorAccent</item>
+    </style>
+
+    <style name="AppTheme.Widget.Design.TextInputLayout" parent="@style/Widget.Design.TextInputLayout">
+        <item name="android:theme">@style/AppTheme.TextInputEditText</item>
+        <item name="errorTextAppearance">@style/AppTheme.TextAppearance.Design.Error</item>
+    </style>
+
+    <style name="AppTheme.TextInputEditText">
+        <item name="editTextStyle">@style/AppTheme.Widget.MaterialComponents.TextInputEditText</item>
+    </style>
+
+    <style name="AppTheme.Widget.MaterialComponents.TextInputEditText" parent="@style/Base.Widget.MaterialComponents.TextInputEditText">
+        <item name="android:textColor">#F0F</item>
+    </style>
+
+    <style name="AppTheme.TextAppearance.Design.Error" parent="@style/TextAppearance.AppCompat.Caption">
+        <item name="android:textColor">#FF0</item>
+    </style>
+</resources>
