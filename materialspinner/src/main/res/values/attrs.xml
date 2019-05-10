@@ -1,0 +1,10 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <declare-styleable name="MaterialSpinner">
+        <attr name="android:enabled" />
+        <attr name="android:focusable" />
+        <attr name="android:focusableInTouchMode" />
+        <attr name="android:spinnerMode" />
+        <attr name="android:prompt" />
+    </declare-styleable>
+</resources>
