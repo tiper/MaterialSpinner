@@ -30,7 +30,7 @@ import com.tiper.materialspinner.R
  * @see [android.support.design.widget.TextInputLayout]
  * @author Tiago Pereira (tiagomiguelmoreirapereira@gmail.com)
  */
-open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, defStyleAttr: Int = android.support.design.R.attr.textInputStyle, mode: Int = Spinner.MODE_DROPDOWN) : TextInputLayout(context, attrs, defStyleAttr) {
+open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, mode: Int = Spinner.MODE_DROPDOWN) : TextInputLayout(context, attrs) {
 
 
     companion object {
@@ -49,7 +49,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
     /**
      * The view that will display the selected item.
      */
-    private val editText = TextInputEditText(context, null, android.support.design.R.attr.editTextStyle)
+    private val editText = TextInputEditText(getContext())
 
     /**
      * Drawable to display when the spinner is in a open state.
@@ -135,7 +135,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
                     DialogPopup(context, getString(R.styleable.MaterialSpinner_android_prompt))
                 }
                 else -> {
-                    DropdownPopup(context, attrs, android.support.v7.appcompat.R.attr.listPopupWindowStyle)
+                    DropdownPopup(context, attrs)
                 }
             }
             recycle()
@@ -352,7 +352,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
     /**
      * A PopupWindow that anchors itself to a host view and displays a list of choices.
      */
-    private inner class DropdownPopup(context: Context, attrs: AttributeSet?, defStyleAttr: Int) : ListPopupWindow(context, attrs, defStyleAttr), SpinnerPopup {
+    private inner class DropdownPopup(context: Context, attrs: AttributeSet?) : ListPopupWindow(context, attrs), SpinnerPopup {
 
         init {
             inputMethodMode = INPUT_METHOD_NOT_NEEDED
