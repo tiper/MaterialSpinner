@@ -3,6 +3,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     android:descendantFocusability="beforeDescendants"
     android:focusableInTouchMode="true"
     android:orientation="vertical"
@@ -33,6 +34,7 @@
         style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
+        app:spinnerMode="bottomsheet"
         android:hint="MaterialSpinner 1" />
 
     <FrameLayout
@@ -94,7 +96,7 @@
         android:layout_height="wrap_content"
         android:hint="MaterialSpinner 3"
         android:prompt="@string/app_name"
-        android:spinnerMode="dialog" />
+        app:spinnerMode="dialog" />
 
     <Spinner
         android:id="@+id/spinner"
@@ -110,6 +112,7 @@
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
         android:prompt="@string/app_name"
+        app:spinnerMode="bottomsheet"
         android:spinnerMode="dropdown" />
 
 </LinearLayout>
