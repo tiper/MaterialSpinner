@@ -11,7 +11,7 @@ For more information please check:
 [![](https://jitpack.io/v/tiper/MaterialSpinner.svg)](https://jitpack.io/#tiper/MaterialSpinner)
 
 ## Screenshot
-![](./screenshot/Screenshot_1.jpg) ![](./screenshot/Screenshot_2.jpg)
+<img src="./screenshot/Screenshot_1.jpg" width="200"/> <img src="./screenshot/Screenshot_2.jpg" width="200"/> <img src="./screenshot/Screenshot_3.jpg" width="200"/>
 
 ## Dependency
 
@@ -38,6 +38,7 @@ dependencies {
 - Showing a hint.
 - Showing an error.
 - Showing a prompt when `spinnerMode` is `dialog`.
+- Showing a bottom sheet when `spinnerMode` is `bottomsheet`.
 
 ## Usage
 There is a [sample](https://github.com/tiper/MaterialSpinner/tree/master/sample) provided which shows how to use the library, but for completeness, here is all that is required to get MaterialSpinner working:
@@ -52,7 +53,11 @@ There is a [sample](https://github.com/tiper/MaterialSpinner/tree/master/sample)
 
 If you want the options to be presented to the user as a dialog window just add:
 ```xml
-android:spinnerMode="dialog"
+app:spinnerMode="dialog"
+```
+If you want the options to be presented to the user as a bottom sheet window just add:
+```xml
+app:spinnerMode="bottomsheet"
 ```
 
 ### JAVA:

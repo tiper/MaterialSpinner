@@ -4,7 +4,11 @@
         <attr name="android:enabled" />
         <attr name="android:focusable" />
         <attr name="android:focusableInTouchMode" />
-        <attr name="android:spinnerMode" />
         <attr name="android:prompt" />
+        <attr name="spinnerMode" format="enum">
+            <enum name="dialog" value="0" />
+            <enum name="dropdown" value="1" />
+            <enum name="bottomsheet" value="2" />
+        </attr>
     </declare-styleable>
 </resources>
