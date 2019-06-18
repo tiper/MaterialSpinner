@@ -1,14 +1,18 @@
 # MaterialSpinner
-MaterialSpinner aims to provide a Material Design Spinner.
 
+
+[![](https://jitpack.io/v/tiper/MaterialSpinner.svg)](https://jitpack.io/#tiper/MaterialSpinner)
+[![Kotlin Version](https://img.shields.io/badge/kotlin-1.3.31-blue.svg)](http://kotlinlang.org/)
+[![License](https://img.shields.io/badge/License-Apache%202.0-blue.svg)](http://www.apache.org/licenses/LICENSE-2.0)
+
+
+MaterialSpinner aims to provide a Material Design Spinner.
 
 This widget is based on TextInputLayout.
 
 For more information please check:
 - [Spinner](https://developer.android.com/guide/topics/ui/controls/spinner)
 - [Text Fields](https://material.io/develop/android/components/text-input-layout/)
-
-[![](https://jitpack.io/v/tiper/MaterialSpinner.svg)](https://jitpack.io/#tiper/MaterialSpinner)
 
 ## Screenshot
 <img src="./screenshot/Screenshot_1.jpg" width="200"/> <img src="./screenshot/Screenshot_2.jpg" width="200"/> <img src="./screenshot/Screenshot_3.jpg" width="200"/>

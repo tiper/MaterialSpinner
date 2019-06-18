@@ -1,7 +1,15 @@
 apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
+apply plugin: 'io.gitlab.arturbosch.detekt'
 
 group = 'com.github.tiper'
+
+detekt {
+    toolVersion = "$rootProject.ext.detekt_version"
+    input = files("src/main/kotlin")
+    filters = ".*/resources/.*,.*/build/.*,.*/tmp/.*"
+    config = files("detekt-config.yml")
+}
 
 android {
     compileSdkVersion rootProject.ext.sdkVersion
@@ -9,11 +17,10 @@ android {
     defaultConfig {
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.sdkVersion
-        versionCode 1
-        versionName "1.0.1"
+        versionCode 3
+        versionName "1.1.0"
 
         testInstrumentationRunner "android.support.test.runner.AndroidJUnitRunner"
-
     }
 
     buildTypes {
@@ -23,11 +30,18 @@ android {
         }
     }
 
+    sourceSets {
+        main.java.srcDirs += "src/main/kotlin"
+        androidTest.java.srcDirs = ["src/androidTest/kotlin"]
+    }
 }
 
 dependencies {
-    implementation "com.android.support:design:28.0.0"
+    detektPlugins "io.gitlab.arturbosch.detekt:detekt-formatting:${detekt.toolVersion}"
+
     implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
+    implementation "com.android.support:design:28.0.0"
+
     androidTestImplementation 'com.android.support.test:runner:1.0.2'
     androidTestImplementation 'com.android.support.test.espresso:espresso-core:3.0.2'
 }
