@@ -22,17 +22,20 @@ import android.view.SoundEffectConstants
 import android.view.View
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
-import android.widget.*
+import android.widget.ListAdapter
+import android.widget.ListView
+import android.widget.SpinnerAdapter
+import android.widget.ThemedSpinnerAdapter
 import com.tiper.materialspinner.R
 
 /**
- * Layout which wraps an [android.support.design.widget.TextInputEditText] to show a floating label when the hint is hidden due to the user inputting text.
+ * Layout which wraps an [TextInputEditText] to show a floating label when the hint is hidden due to the user inputting text.
  *
- * @see [android.support.design.widget.TextInputLayout]
+ * @see [TextInputLayout]
  * @author Tiago Pereira (tiagomiguelmoreirapereira@gmail.com)
  */
-open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, mode: Int = MODE_DROPDOWN) : TextInputLayout(context, attrs) {
-
+open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: AttributeSet? = null, mode: Int = MODE_DROPDOWN) :
+    TextInputLayout(context, attrs) {
 
     companion object {
         /**
@@ -127,8 +130,6 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
         }
         get() = popup.getPrompt()
 
-
-
     /**
      * @return The data corresponding to the currently selected item, or null if there is nothing selected.
      */
@@ -146,7 +147,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
             editText.isEnabled = getBoolean(R.styleable.MaterialSpinner_android_enabled, editText.isEnabled)
             editText.isFocusable = getBoolean(R.styleable.MaterialSpinner_android_focusable, editText.isFocusable)
             editText.isFocusableInTouchMode = getBoolean(R.styleable.MaterialSpinner_android_focusableInTouchMode, editText.isFocusableInTouchMode)
-            popup = when(getInt(R.styleable.MaterialSpinner_spinnerMode, mode)) {
+            popup = when (getInt(R.styleable.MaterialSpinner_spinnerMode, mode)) {
                 MODE_DIALOG -> {
                     DialogPopup(context, getString(R.styleable.MaterialSpinner_android_prompt))
                 }
@@ -169,7 +170,10 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
             @SuppressLint("ResourceType")
             val normal = getColor(1, 0)
             recycle()
-            ColorStateList(arrayOf(intArrayOf(android.R.attr.state_pressed), intArrayOf(android.R.attr.state_focused), intArrayOf()), intArrayOf(activated, activated, normal))
+            ColorStateList(
+                arrayOf(intArrayOf(android.R.attr.state_pressed), intArrayOf(android.R.attr.state_focused), intArrayOf()),
+                intArrayOf(activated, activated, normal)
+            )
         }.also { colorList ->
             // Apply it to the drawables
             context.theme.let {
@@ -303,7 +307,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
         prompt = context.getText(promptId)
     }
 
-    private inner class DialogPopup(val context: Context, private var prompt: CharSequence?= null) : DialogInterface.OnClickListener, SpinnerPopup {
+    private inner class DialogPopup(val context: Context, private var prompt: CharSequence? = null) : DialogInterface.OnClickListener, SpinnerPopup {
 
         private var popup: AlertDialog? = null
         private var adapter: ListAdapter? = null
@@ -358,7 +362,6 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
             this.listener = listener
         }
 
-
         override fun getItem(position: Int): Any? {
             return adapter?.getItem(position)
         }
@@ -407,11 +410,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
             }
         }
 
-
-        override fun setPromptText(hintText: CharSequence?) {
-            // Prompt text is ignored for dropdown.
-        }
-
+        override fun setPromptText(hintText: CharSequence?) = Unit
 
         override fun getPrompt(): CharSequence? {
             return null
@@ -426,7 +425,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
         }
     }
 
-    private inner class BottomSheetPopup(val context: Context, private var prompt: CharSequence?= null) : SpinnerPopup {
+    private inner class BottomSheetPopup(val context: Context, private var prompt: CharSequence? = null) : SpinnerPopup {
 
         private var popup: BottomSheetDialog? = null
         private var adapter: ListAdapter? = null
@@ -478,7 +477,6 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
             this.listener = listener
         }
 
-
         override fun getItem(position: Int): Any? {
             return adapter?.getItem(position)
         }
@@ -491,10 +489,11 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
     /**
      * Creates a new ListAdapter wrapper for the specified adapter.
      *
-     * @param adapter       The SpinnerAdapter to transform into a ListAdapter.
-     * @param dropDownTheme The theme against which to inflate drop-down views, may be {@null} to use default theme.
+     * @param [adapter] The SpinnerAdapter to transform into a ListAdapter.
+     * @param [dropDownTheme] The theme against which to inflate drop-down views, may be {@null} to use default theme.
      */
     private inner class DropDownAdapter(private val adapter: SpinnerAdapter?, dropDownTheme: Resources.Theme?) : ListAdapter, SpinnerAdapter {
+
         private val listAdapter: ListAdapter?
 
         init {
@@ -645,6 +644,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
 
         /**
          * Set hint text to be displayed to the user. This should provide a description of the choice being made.
+         *
          * @param [hintText] Hint text to set.
          */
         fun setPromptText(hintText: CharSequence?)
@@ -657,7 +657,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
         /**
          * Sets the adapter that provides the data and the views to represent the data in this popup window.
          *
-         * @param adapter The adapter to use to create this window's content.
+         * @param [adapter] The adapter to use to create this window's content.
          */
         fun setAdapter(adapter: ListAdapter?)
 
@@ -669,14 +669,14 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
         /**
          * Set a listener to receive a callback when the popup is dismissed.
          *
-         * @param listener Listener that will be notified when the popup is dismissed.
+         * @param [listener] Listener that will be notified when the popup is dismissed.
          */
         fun setOnDismissListener(listener: OnDismissListener?)
 
         /**
          * Get the data item associated with the specified position in the data set.
          *
-         * @param position Position of the item whose data we want within the adapter's data set.
+         * @param [position] Position of the item whose data we want within the adapter's data set.
          * @return The data at the specified position.
          */
         fun getItem(position: Int): Any?
@@ -684,7 +684,7 @@ open class MaterialSpinner @JvmOverloads constructor(context: Context, attrs: At
         /**
          * Get the row id associated with the specified position in the list.
          *
-         * @param position The position of the item within the adapter's data set whose row id we want.
+         * @param [position] The position of the item within the adapter's data set whose row id we want.
          * @return The id of the item at the specified position.
          */
         fun getItemId(position: Int): Long
