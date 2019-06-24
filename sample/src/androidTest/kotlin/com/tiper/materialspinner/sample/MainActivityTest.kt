@@ -21,7 +21,6 @@ import org.junit.Rule
 import org.junit.Test
 import org.junit.runner.RunWith
 
-
 @LargeTest
 @RunWith(AndroidJUnit4::class)
 class MainActivityTest {
@@ -31,13 +30,33 @@ class MainActivityTest {
     var mActivityTestRule = ActivityTestRule(MainActivity::class.java)
 
     @Test
-    fun popupTest() {
+    fun bottomSheetTest() {
+
+        onView(withId(R.id.material_spinner_1)).perform(click())
+
+        onBottomSheet(1).perform(click())
+
+        onSpinner(R.id.material_spinner_1).check(matches(withText("Venus")))
+    }
+
+    @Test
+    fun dropdownTest() {
 
         onView(withId(R.id.material_spinner_2)).perform(click())
 
-        onPopup().perform(click())
+        onDropdown(0).perform(click())
 
         onSpinner(R.id.material_spinner_2).check(matches(withText("Mercury")))
+    }
+
+    @Test
+    fun dialogTest() {
+
+        onView(withId(R.id.material_spinner_3)).perform(click())
+
+        onDialog(2).perform(click())
+
+        onSpinner(R.id.material_spinner_3).check(matches(withText("Earth")))
     }
 
     @Test
@@ -57,7 +76,7 @@ class MainActivityTest {
 
         onView(withId(R.id.material_spinner_2)).perform(click())
 
-        onPopup().perform(click())
+        onDropdown(0).perform(click())
 
         onSpinner(R.id.material_spinner_2).check(matches(withText("Mercury")))
 
@@ -94,14 +113,38 @@ class MainActivityTest {
         return onView(atPosition(0, atPosition(0, withId(id))))
     }
 
-    private fun onPopup(): DataInteraction {
+    private fun onDropdown(position: Int): DataInteraction {
         return onData(anything())
             .inAdapterView(
                 atPosition(
                     0,
                     withClassName(`is`("android.widget.PopupWindow\$PopupBackgroundView"))
                 )
-            ).atPosition(0)
+            ).atPosition(position)
     }
 
+    private fun onBottomSheet(position: Int): DataInteraction {
+        return onData(anything())
+            .inAdapterView(
+                atPosition(
+                    0,
+                    withId(R.id.design_bottom_sheet)
+                )
+            )
+            .atPosition(position)
+    }
+
+    private fun onDialog(position: Int): DataInteraction {
+        return onData(anything())
+            .inAdapterView(
+                allOf(
+                    withClassName(`is`("com.android.internal.app.AlertController\$RecycleListView")),
+                    atPosition(
+                        0,
+                        withClassName(`is`("android.widget.FrameLayout"))
+                    )
+                )
+            )
+            .atPosition(position)
+    }
 }
