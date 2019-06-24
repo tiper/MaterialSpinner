@@ -33,11 +33,11 @@ class MainActivityTest {
     @Test
     fun popupTest() {
 
-        onView(withId(R.id.material_spinner_1)).perform(click())
+        onView(withId(R.id.material_spinner_2)).perform(click())
 
         onPopup().perform(click())
 
-        onSpinner(R.id.material_spinner_1).check(matches(withText("Mercury")))
+        onSpinner(R.id.material_spinner_2).check(matches(withText("Mercury")))
     }
 
     @Test
@@ -55,15 +55,15 @@ class MainActivityTest {
     @Test
     fun clearTest() {
 
-        onView(withId(R.id.material_spinner_1)).perform(click())
+        onView(withId(R.id.material_spinner_2)).perform(click())
 
         onPopup().perform(click())
 
-        onSpinner(R.id.material_spinner_1).check(matches(withText("Mercury")))
+        onSpinner(R.id.material_spinner_2).check(matches(withText("Mercury")))
 
-        onView(withId(R.id.b1_clear)).perform(click())
+        onView(withId(R.id.b2_clear)).perform(click())
 
-        onSpinner(R.id.material_spinner_1).check(matches(withText(String())))
+        onSpinner(R.id.material_spinner_2).check(matches(withText(String())))
     }
 
     private fun atPosition(position: Int, parentMatcher: Matcher<View>): Matcher<View> {

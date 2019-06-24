@@ -5,6 +5,7 @@
         <attr name="android:focusable" />
         <attr name="android:focusableInTouchMode" />
         <attr name="android:prompt" />
+        <attr name="android:src" />
         <attr name="spinnerMode" format="enum">
             <enum name="dialog" value="0" />
             <enum name="dropdown" value="1" />
