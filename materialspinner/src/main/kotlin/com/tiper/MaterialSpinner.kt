@@ -79,16 +79,6 @@ open class MaterialSpinner @JvmOverloads constructor(
     private val editText = TextInputEditText(getContext())
 
     /**
-     * Drawable to display when the spinner is in a open state.
-     */
-    private val expandedDrawable: Drawable?
-
-    /**
-     * Drawable to display when the spinner is in a closed state.
-     */
-    private val collapsedDrawable: Drawable?
-
-    /**
      * Extended [android.widget.Adapter] that is the bridge between this Spinner and its data.
      */
     var adapter: SpinnerAdapter? = null
@@ -180,58 +170,50 @@ open class MaterialSpinner @JvmOverloads constructor(
                     DropdownPopup(context, attrs)
                 }
             }
+
+            // Create the color state list
+            //noinspection Recycle
+            context.obtainStyledAttributes(
+                attrs,
+                intArrayOf(R.attr.colorControlActivated, R.attr.colorControlNormal)
+            ).run {
+                val activated = getColor(0, 0)
+                @SuppressLint("ResourceType")
+                val normal = getColor(1, 0)
+                recycle()
+                ColorStateList(
+                    arrayOf(
+                        intArrayOf(android.R.attr.state_pressed),
+                        intArrayOf(android.R.attr.state_focused),
+                        intArrayOf()
+                    ), intArrayOf(activated, activated, normal)
+                )
+            }.let {
+                val resources = getContext().resources
+                val theme = getContext().theme
+                // Set the arrow and properly tint it.
+                resources.getDrawableCompat(
+                    getResourceId(
+                        R.styleable.MaterialSpinner_android_src,
+                        R.drawable.ic_spinner_drawable
+                    ), theme
+                )?.apply {
+                    DrawableCompat.setTintList(this, it)
+                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
+                }
+            }?.apply {
+                setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+            }.let {
+                setDrawable(it)
+            }
+
             recycle()
         }
 
         this.addView(editText, LayoutParams(LayoutParams.MATCH_PARENT, LayoutParams.MATCH_PARENT))
 
-        // Create the color state list
-        //noinspection Recycle
-        context.obtainStyledAttributes(
-            attrs,
-            intArrayOf(R.attr.colorControlActivated, R.attr.colorControlNormal)
-        ).run {
-            val activated = getColor(0, 0)
-            @SuppressLint("ResourceType")
-            val normal = getColor(1, 0)
-            recycle()
-            ColorStateList(
-                arrayOf(
-                    intArrayOf(android.R.attr.state_pressed),
-                    intArrayOf(android.R.attr.state_focused),
-                    intArrayOf()
-                ), intArrayOf(activated, activated, normal)
-            )
-        }.also { colorList ->
-            // Apply it to the drawables
-            val resources = getContext().resources
-            val theme = getContext().theme
-            // Set the arrow and properly tint it.
-            expandedDrawable =
-                resources.getDrawableCompat(R.drawable.ic_arrow_drop_up, theme)?.apply {
-                    DrawableCompat.setTintList(this, colorList)
-                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-                }
-            collapsedDrawable =
-                resources.getDrawableCompat(R.drawable.ic_arrow_drop_down, theme)?.apply {
-                    DrawableCompat.setTintList(this, colorList)
-                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-                }
-        }
-
-        // Calculate bounds
-        expandedDrawable?.apply {
-            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-        }
-        collapsedDrawable?.apply {
-            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-        }
-
-        // Set the drawable
-        setCloseDrawable()
         popup.setOnDismissListener(object : SpinnerPopup.OnDismissListener {
             override fun onDismiss() {
-                setCloseDrawable()
                 editText.clearFocus()
             }
         })
@@ -248,23 +230,12 @@ open class MaterialSpinner @JvmOverloads constructor(
             editText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
                 v.handler.post {
                     if (hasFocus) {
-                        setOpenDrawable()
                         v.performClick()
-                    } else {
-                        setCloseDrawable()
                     }
                     it?.onFocusChange(v, hasFocus)
                 }
             }
         }
-    }
-
-    private fun setOpenDrawable() {
-        setDrawable(expandedDrawable)
-    }
-
-    private fun setCloseDrawable() {
-        setDrawable(collapsedDrawable)
     }
 
     private fun setDrawable(d: Drawable?) {

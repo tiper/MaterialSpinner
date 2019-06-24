@@ -20,7 +20,6 @@ class MainActivity : AppCompatActivity() {
             override fun onNothingSelected(parent: MaterialSpinner) {
                 Log.v("MaterialSpinner", "onNothingSelected parent=${parent.id}")
             }
-
         }
     }
 
