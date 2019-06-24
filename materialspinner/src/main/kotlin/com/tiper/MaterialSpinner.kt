@@ -10,6 +10,7 @@ import android.database.DataSetObserver
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.support.annotation.DrawableRes
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
@@ -20,8 +21,10 @@ import android.text.InputType
 import android.util.AttributeSet
 import android.view.SoundEffectConstants
 import android.view.View
+import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
+import android.widget.AdapterView
 import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.SpinnerAdapter
@@ -112,7 +115,7 @@ open class MaterialSpinner @JvmOverloads constructor(
         set(value) {
             field = value
             adapter?.apply {
-                if (value in (INVALID_POSITION + 1) until count) {
+                if (value in 0 until count) {
                     editText.setText(
                         when (val item = getItem(value)) {
                             is CharSequence -> item
@@ -201,24 +204,19 @@ open class MaterialSpinner @JvmOverloads constructor(
             )
         }.also { colorList ->
             // Apply it to the drawables
-            context.theme.let {
-                // Set the arrow and properly tint it.
-                expandedDrawable =
-                    ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_drop_up, it)?.apply {
-                        DrawableCompat.wrap(this).mutate().apply {
-                            DrawableCompat.setTintList(this, colorList)
-                            DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-                        }
-                    }
-                collapsedDrawable =
-                    ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_drop_down, it)
-                        ?.apply {
-                            DrawableCompat.wrap(this).mutate().apply {
-                                DrawableCompat.setTintList(this, colorList)
-                                DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-                            }
-                        }
-            }
+            val resources = getContext().resources
+            val theme = getContext().theme
+            // Set the arrow and properly tint it.
+            expandedDrawable =
+                resources.getDrawableCompat(R.drawable.ic_arrow_drop_up, theme)?.apply {
+                    DrawableCompat.setTintList(this, colorList)
+                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
+                }
+            collapsedDrawable =
+                resources.getDrawableCompat(R.drawable.ic_arrow_drop_down, theme)?.apply {
+                    DrawableCompat.setTintList(this, colorList)
+                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
+                }
         }
 
         // Calculate bounds
@@ -247,7 +245,7 @@ open class MaterialSpinner @JvmOverloads constructor(
         }
 
         editText.onFocusChangeListener.let {
-            editText.setOnFocusChangeListener { v, hasFocus ->
+            editText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
                 v.handler.post {
                     if (hasFocus) {
                         setOpenDrawable()
@@ -274,8 +272,10 @@ open class MaterialSpinner @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
-        throw RuntimeException("Don't call setOnClickListener. You probably want" +
-                "setOnItemClickListener instead")
+        throw RuntimeException(
+            "Don't call setOnClickListener. You probably want" +
+                    "setOnItemClickListener instead"
+        )
     }
 
     /**
@@ -337,6 +337,11 @@ open class MaterialSpinner @JvmOverloads constructor(
      */
     fun setPromptId(promptId: Int) {
         prompt = context.getText(promptId)
+    }
+
+    private fun Resources.getDrawableCompat(@DrawableRes id: Int, theme: Resources.Theme?): Drawable? {
+        return ResourcesCompat.getDrawable(this, id, theme)
+            ?.let { DrawableCompat.wrap(it).mutate() }
     }
 
     private inner class DialogPopup(
@@ -499,17 +504,18 @@ open class MaterialSpinner @JvmOverloads constructor(
                 setContentView(ListView(context).apply {
                     adapter = this@BottomSheetPopup.adapter
 
-                    setOnItemClickListener { parent, v, position, id ->
-                        this@MaterialSpinner.selection = position
-                        onItemClickListener?.let {
-                            this@MaterialSpinner.performItemClick(
-                                v,
-                                position,
-                                adapter?.getItemId(position) ?: 0L
-                            )
+                    onItemClickListener =
+                        AdapterView.OnItemClickListener { parent, v, position, id ->
+                            this@MaterialSpinner.selection = position
+                            onItemClickListener?.let {
+                                this@MaterialSpinner.performItemClick(
+                                    v,
+                                    position,
+                                    adapter?.getItemId(position) ?: 0L
+                                )
+                            }
+                            dismiss()
                         }
-                        dismiss()
-                    }
                 })
                 if (Build.VERSION.SDK_INT > Build.VERSION_CODES.JELLY_BEAN) {
                     textDirection = this@MaterialSpinner.textDirection
