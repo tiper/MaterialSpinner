@@ -9,6 +9,7 @@
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:descendantFocusability="beforeDescendants"
+        android:focusable="true"
         android:focusableInTouchMode="true"
         android:orientation="vertical"
         android:padding="8dp"
@@ -23,6 +24,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="clear" />
 
             <Button
@@ -42,7 +45,6 @@
             app:spinnerMode="bottomsheet" />
 
         <FrameLayout
-
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:paddingTop="8dp">
@@ -52,6 +54,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="clear" />
 
             <Button
@@ -70,7 +74,10 @@
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
             android:hint="MaterialSpinner 2"
-            android:prompt="@string/app_name" />
+            android:prompt="@string/app_name"
+            android:src="@drawable/ic_selector_drawable"
+            android:textColor="#0ff"
+            tools:text="lalala" />
 
         <FrameLayout
             android:layout_width="match_parent"
@@ -82,6 +89,8 @@
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_gravity="start"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="clear" />
 
             <Button
@@ -99,8 +108,8 @@
             android:layout_height="wrap_content"
             android:hint="MaterialSpinner 3"
             android:prompt="@string/app_name"
-            android:src="@drawable/ic_selector_drawable"
-            app:spinnerMode="dialog" />
+            app:spinnerMode="dialog"
+            app:srcCompat="@drawable/ic_selector_drawable" />
 
         <Spinner
             android:id="@+id/spinner"

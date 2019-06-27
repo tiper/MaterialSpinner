@@ -6,6 +6,10 @@
         <attr name="android:focusableInTouchMode" />
         <attr name="android:prompt" />
         <attr name="android:src" />
+        <attr name="android:textColor" />
+        <attr name="android:textSize" />
+        <attr name="android:text" />
+        <attr name="srcCompat" />
         <attr name="spinnerMode" format="enum">
             <enum name="dialog" value="0" />
             <enum name="dropdown" value="1" />
