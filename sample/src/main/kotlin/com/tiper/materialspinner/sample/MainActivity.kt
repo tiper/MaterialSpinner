@@ -1,6 +1,7 @@
 package com.tiper.materialspinner.sample
 
 import android.os.Bundle
+import android.support.v4.content.res.ResourcesCompat
 import android.support.v7.app.AppCompatActivity
 import android.util.Log
 import android.view.View
@@ -42,6 +43,7 @@ class MainActivity : AppCompatActivity() {
                 adapter = it
                 onItemSelectedListener = listener
                 selection = 3
+                setDrawable(ResourcesCompat.getDrawable(resources, R.drawable.ic_arrow_downward, theme))
             }
             spinner.adapter = it
             appCompatSpinner.adapter = it

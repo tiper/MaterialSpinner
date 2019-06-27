@@ -68,6 +68,8 @@ open class MaterialSpinner @JvmOverloads constructor(
         const val MODE_BOTTOMSHEET = 2
     }
 
+    private val colorStateList: ColorStateList
+
     /**
      * The view that will display the available list of choices.
      */
@@ -191,7 +193,7 @@ open class MaterialSpinner @JvmOverloads constructor(
 
             // Create the color state list.
             //noinspection Recycle
-            context.obtainStyledAttributes(
+            colorStateList = context.obtainStyledAttributes(
                 attrs,
                 intArrayOf(R.attr.colorControlActivated, R.attr.colorControlNormal)
             ).run {
@@ -206,23 +208,17 @@ open class MaterialSpinner @JvmOverloads constructor(
                         intArrayOf()
                     ), intArrayOf(activated, activated, normal)
                 )
-            }.let {
-                // Set the arrow and properly tint it.
-                getContext().getDrawableCompat(
+            }
+            // Set the arrow and properly tint it.
+            getContext().getDrawableCompat(
+                getResourceId(
+                    R.styleable.MaterialSpinner_android_src,
                     getResourceId(
-                        R.styleable.MaterialSpinner_android_src,
-                        getResourceId(
-                            R.styleable.MaterialSpinner_srcCompat,
-                            R.drawable.ic_spinner_drawable
-                        )
-                    ), getContext().theme
-                )?.apply {
-                    DrawableCompat.setTintList(this, it)
-                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-                }
-            }?.apply {
-                setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            }.also {
+                        R.styleable.MaterialSpinner_srcCompat,
+                        R.drawable.ic_spinner_drawable
+                    )
+                ), getContext().theme
+            ).let {
                 setDrawable(it)
             }
 
@@ -257,8 +253,19 @@ open class MaterialSpinner @JvmOverloads constructor(
         }
     }
 
-    private fun setDrawable(d: Drawable?) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(null, null, d, null)
+    fun setDrawable(drawable: Drawable?, applyTint: Boolean = true) {
+        editText.setCompoundDrawablesWithIntrinsicBounds(
+            null,
+            null,
+            drawable?.let { DrawableCompat.wrap(drawable) }?.apply {
+                setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+                if (applyTint) {
+                    DrawableCompat.setTintList(this, colorStateList)
+                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
+                }
+            },
+            null
+        )
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
