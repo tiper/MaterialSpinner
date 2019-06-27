@@ -15,6 +15,7 @@ class MainActivity : AppCompatActivity() {
         object : MaterialSpinner.OnItemSelectedListener {
             override fun onItemSelected(parent: MaterialSpinner, view: View?, position: Int, id: Long) {
                 Log.v("MaterialSpinner", "onItemSelected parent=${parent.id}, position=$position")
+                parent.focusSearch(View.FOCUS_UP)?.requestFocus()
             }
 
             override fun onNothingSelected(parent: MaterialSpinner) {

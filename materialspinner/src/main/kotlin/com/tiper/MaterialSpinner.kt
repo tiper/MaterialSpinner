@@ -159,6 +159,24 @@ open class MaterialSpinner @JvmOverloads constructor(
                 R.styleable.MaterialSpinner_android_focusableInTouchMode,
                 editText.isFocusableInTouchMode
             )
+            getColorStateList(R.styleable.MaterialSpinner_android_textColor)?.let {
+                editText.setTextColor(
+                    it
+                )
+            }
+            getDimensionPixelSize(
+                R.styleable.MaterialSpinner_android_textSize,
+                -1
+            ).let { if (it > 0) editText.textSize = it.toFloat() }
+            getText(R.styleable.MaterialSpinner_android_text)?.let {
+                // Allow text in debug mode for preview purposes.
+                if (isInEditMode) {
+                    editText.setText(it)
+                } else {
+                    throw RuntimeException("Don't set text directly." +
+                            "You probably want setSelection instead.")
+                }
+            }
             popup = when (getInt(R.styleable.MaterialSpinner_spinnerMode, mode)) {
                 MODE_DIALOG -> {
                     DialogPopup(context, getString(R.styleable.MaterialSpinner_android_prompt))
@@ -171,7 +189,7 @@ open class MaterialSpinner @JvmOverloads constructor(
                 }
             }
 
-            // Create the color state list
+            // Create the color state list.
             //noinspection Recycle
             context.obtainStyledAttributes(
                 attrs,
@@ -189,21 +207,22 @@ open class MaterialSpinner @JvmOverloads constructor(
                     ), intArrayOf(activated, activated, normal)
                 )
             }.let {
-                val resources = getContext().resources
-                val theme = getContext().theme
                 // Set the arrow and properly tint it.
-                resources.getDrawableCompat(
+                getContext().getDrawableCompat(
                     getResourceId(
                         R.styleable.MaterialSpinner_android_src,
-                        R.drawable.ic_spinner_drawable
-                    ), theme
+                        getResourceId(
+                            R.styleable.MaterialSpinner_srcCompat,
+                            R.drawable.ic_spinner_drawable
+                        )
+                    ), getContext().theme
                 )?.apply {
                     DrawableCompat.setTintList(this, it)
                     DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
                 }
             }?.apply {
                 setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-            }.let {
+            }.also {
                 setDrawable(it)
             }
 
@@ -243,9 +262,8 @@ open class MaterialSpinner @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
-        throw RuntimeException(
-            "Don't call setOnClickListener. You probably want" +
-                    "setOnItemClickListener instead"
+        throw RuntimeException("Don't call setOnClickListener." +
+                    "You probably want setOnItemClickListener instead."
         )
     }
 
@@ -310,9 +328,18 @@ open class MaterialSpinner @JvmOverloads constructor(
         prompt = context.getText(promptId)
     }
 
-    private fun Resources.getDrawableCompat(@DrawableRes id: Int, theme: Resources.Theme?): Drawable? {
-        return ResourcesCompat.getDrawable(this, id, theme)
-            ?.let { DrawableCompat.wrap(it).mutate() }
+    private fun Context.getDrawableCompat(
+        @DrawableRes id: Int,
+        theme: Resources.Theme?
+    ): Drawable? {
+        return resources.getDrawableCompat(id, theme)
+    }
+
+    private fun Resources.getDrawableCompat(
+        @DrawableRes id: Int,
+        theme: Resources.Theme?
+    ): Drawable? {
+        return ResourcesCompat.getDrawable(this, id, theme)?.let { DrawableCompat.wrap(it) }
     }
 
     private inner class DialogPopup(
