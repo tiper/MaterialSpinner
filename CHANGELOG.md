@@ -1,6 +1,13 @@
 Change Log
 ==========
 
+Version 1.2.0 *(2019-06-17)*
+----------------------------
+
+ * New: Added support for custom drawables.
+ * New: Added support for text color customization.
+ * New: Added support for text size customization.
+
 Version 1.1.0 *(2019-06-17)*
 ----------------------------
 
