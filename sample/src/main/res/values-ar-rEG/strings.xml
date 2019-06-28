@@ -1,0 +1,7 @@
+<resources>
+    <string name="materialspinner">مادة الدوار</string>
+    <string name="materialspinner_1">مادة الدوار 1</string>
+    <string name="materialspinner_2">مادة الدوار 2</string>
+    <string name="materialspinner_3">3 مادة الدوار </string>
+    <string name="error">3أنا خطأ</string>
+</resources>

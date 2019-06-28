@@ -55,31 +55,23 @@ class MainActivity : AppCompatActivity() {
             material_spinner_1.selection = ListView.INVALID_POSITION
         }
         b1_error.setOnClickListener {
-            if (material_spinner_1.error.isNullOrEmpty()) {
-                material_spinner_1.error = "I am an error"
-            } else {
-                material_spinner_1.error = null
-            }
+            material_spinner_1.onClick()
         }
         b2_clear.setOnClickListener {
             material_spinner_2.selection = ListView.INVALID_POSITION
         }
         b2_error.setOnClickListener {
-            if (material_spinner_2.error.isNullOrEmpty()) {
-                material_spinner_2.error = "I am an error"
-            } else {
-                material_spinner_2.error = null
-            }
+            material_spinner_2.onClick()
         }
         b3_clear.setOnClickListener {
             material_spinner_3.selection = ListView.INVALID_POSITION
         }
         b3_error.setOnClickListener {
-            if (material_spinner_3.error.isNullOrEmpty()) {
-                material_spinner_3.error = "I am an error"
-            } else {
-                material_spinner_3.error = null
-            }
+            material_spinner_3.onClick()
         }
+    }
+
+    private fun MaterialSpinner.onClick() {
+        error = if (error.isNullOrEmpty()) resources.getText(R.string.error) else null
     }
 }

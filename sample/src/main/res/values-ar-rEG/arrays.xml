@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="planets_array">
+        <item>الزئبق</item>
+        <item>فينوس</item>
+        <item>الأرض</item>
+        <item>المريخ</item>
+        <item>كوكب المشتري</item>
+        <item>زحل</item>
+        <item>أورانوس</item>
+        <item>نبتون</item>
+    </string-array>
+</resources>

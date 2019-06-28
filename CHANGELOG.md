@@ -1,7 +1,12 @@
 Change Log
 ==========
 
-Version 1.2.0 *(2019-06-17)*
+Version 1.3.0 *(2019-06-28)*
+----------------------------
+
+ * New: Added RTL support.
+ 
+Version 1.2.0 *(2019-06-27)*
 ----------------------------
 
  * New: Added support for custom drawables.
