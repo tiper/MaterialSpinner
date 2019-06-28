@@ -45,6 +45,7 @@ dependencies {
 - Showing a prompt when `spinnerMode` is `dialog`.
 - Showing a bottom sheet when `spinnerMode` is `bottomsheet`.
 - Custom spinner drawables.
+- RTL support.
 
 ## Usage
 There is a [sample](https://github.com/tiper/MaterialSpinner/tree/master/sample) provided which shows how to use the library, but for completeness, here is all that is required to get MaterialSpinner working:

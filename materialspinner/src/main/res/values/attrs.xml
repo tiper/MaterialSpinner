@@ -9,6 +9,7 @@
         <attr name="android:textColor" />
         <attr name="android:textSize" />
         <attr name="android:text" />
+        <attr name="android:gravity" />
         <attr name="srcCompat" />
         <attr name="spinnerMode" format="enum">
             <enum name="dialog" value="0" />

@@ -41,7 +41,7 @@
             style="@style/Widget.MaterialComponents.TextInputLayout.OutlinedBox"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="MaterialSpinner 1"
+            android:hint="@string/materialspinner_1"
             app:spinnerMode="bottomsheet" />
 
         <FrameLayout
@@ -73,7 +73,7 @@
             android:layout_height="wrap_content"
             android:layout_marginStart="50dp"
             android:layout_marginEnd="50dp"
-            android:hint="MaterialSpinner 2"
+            android:hint="@string/materialspinner_2"
             android:prompt="@string/app_name"
             android:src="@drawable/ic_selector_drawable"
             android:textColor="#0ff"
@@ -106,8 +106,9 @@
             style="@style/AppTheme.Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="MaterialSpinner 3"
-            android:prompt="@string/app_name"
+            android:hint="@string/materialspinner_3"
+            android:gravity="left"
+            android:prompt="@string/materialspinner"
             app:spinnerMode="dialog"
             app:srcCompat="@drawable/ic_selector_drawable" />
 

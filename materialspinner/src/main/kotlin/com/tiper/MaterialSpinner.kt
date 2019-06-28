@@ -16,20 +16,20 @@ import android.support.design.widget.TextInputEditText
 import android.support.design.widget.TextInputLayout
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.graphics.drawable.DrawableCompat
+import android.support.v4.text.TextUtilsCompat
+import android.support.v4.view.ViewCompat
 import android.support.v7.widget.ListPopupWindow
 import android.text.InputType
 import android.util.AttributeSet
+import android.view.Gravity
 import android.view.SoundEffectConstants
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.accessibility.AccessibilityEvent
-import android.widget.AdapterView
-import android.widget.ListAdapter
-import android.widget.ListView
-import android.widget.SpinnerAdapter
-import android.widget.ThemedSpinnerAdapter
+import android.widget.*
 import com.tiper.materialspinner.R
+import java.util.*
 
 /**
  * Layout which wraps an [TextInputEditText] to show a floating label when the hint is hidden due to
@@ -101,6 +101,13 @@ open class MaterialSpinner @JvmOverloads constructor(
     var onItemClickListener: OnItemClickListener? = null
 
     /**
+     * The layout direction of this view.
+     * {@link #LAYOUT_DIRECTION_RTL} if the layout direction is RTL.
+     * {@link #LAYOUT_DIRECTION_LTR} if the layout direction is not RTL.
+     */
+    private var direction = if (isLayoutRtl()) ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR
+
+    /**
      * The currently selected item.
      */
     var selection = INVALID_POSITION
@@ -153,6 +160,23 @@ open class MaterialSpinner @JvmOverloads constructor(
 
     init {
         context.obtainStyledAttributes(attrs, R.styleable.MaterialSpinner).run {
+            getInt(R.styleable.MaterialSpinner_android_gravity, -1).let {
+                if (it > -1) {
+                    gravity = it
+                    editText.gravity = it
+                } else {
+                    if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+                        @SuppressLint("RtlHardcoded")
+                        if (isLayoutRtl()) {
+                            gravity = Gravity.RIGHT
+                            editText.gravity = Gravity.RIGHT
+                        } else {
+                            gravity = Gravity.LEFT
+                            editText.gravity = Gravity.LEFT
+                        }
+                    }
+                }
+            }
             editText.isEnabled =
                 getBoolean(R.styleable.MaterialSpinner_android_enabled, editText.isEnabled)
             editText.isFocusable =
@@ -254,18 +278,21 @@ open class MaterialSpinner @JvmOverloads constructor(
     }
 
     fun setDrawable(drawable: Drawable?, applyTint: Boolean = true) {
-        editText.setCompoundDrawablesWithIntrinsicBounds(
-            null,
-            null,
-            drawable?.let { DrawableCompat.wrap(drawable) }?.apply {
-                setBounds(0, 0, intrinsicWidth, intrinsicHeight)
-                if (applyTint) {
-                    DrawableCompat.setTintList(this, colorStateList)
-                    DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
-                }
-            },
-            null
-        )
+        drawable?.let { DrawableCompat.wrap(drawable) }?.apply {
+            setBounds(0, 0, intrinsicWidth, intrinsicHeight)
+            if (applyTint) {
+                DrawableCompat.setTintList(this, colorStateList)
+                DrawableCompat.setTintMode(this, PorterDuff.Mode.SRC_IN)
+            }
+        }.let {
+            if (isLayoutRtl()) {
+                Pair(it, null)
+            } else {
+                Pair(null, it)
+            }
+        }.let { (left, right) ->
+            editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null)
+        }
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
@@ -304,6 +331,19 @@ open class MaterialSpinner @JvmOverloads constructor(
     }
 
     /**
+     * @see [android.view.View.onRtlPropertiesChanged]
+     */
+    override fun onRtlPropertiesChanged(layoutDirection: Int) {
+        if (direction != layoutDirection) {
+            direction = layoutDirection
+            editText.compoundDrawables.let {
+                editText.setCompoundDrawablesWithIntrinsicBounds(it[2], null, it[0], null)
+            }
+        }
+        super.onRtlPropertiesChanged(layoutDirection)
+    }
+
+    /**
      * Call the OnItemClickListener, if it is defined.
      * Performs all normal actions associated with clicking: reporting accessibility event, playing
      * a sound, etc.
@@ -335,6 +375,25 @@ open class MaterialSpinner @JvmOverloads constructor(
         prompt = context.getText(promptId)
     }
 
+    /**
+     * Returns if this view layout should be in a RTL direction.
+     * @return True if is RTL, false otherwise .
+     */
+    private fun isLayoutRtl(): Boolean {
+        return Locale.getDefault().isLayoutRtl()
+    }
+
+    /**
+     * Returns if this Locale direction is RTL.
+     * @return True if is RTL, false otherwise .
+     */
+    private fun Locale.isLayoutRtl(): Boolean {
+        return TextUtilsCompat.getLayoutDirectionFromLocale(this) == ViewCompat.LAYOUT_DIRECTION_RTL
+    }
+
+    /**
+     * @see [android.support.v4.content.res.ResourcesCompat.getDrawable]
+     */
     private fun Context.getDrawableCompat(
         @DrawableRes id: Int,
         theme: Resources.Theme?
@@ -342,6 +401,10 @@ open class MaterialSpinner @JvmOverloads constructor(
         return resources.getDrawableCompat(id, theme)
     }
 
+    /**
+     * @see [android.support.v4.content.res.ResourcesCompat.getDrawable]
+     */
+    @Throws(Resources.NotFoundException::class)
     private fun Resources.getDrawableCompat(
         @DrawableRes id: Int,
         theme: Resources.Theme?

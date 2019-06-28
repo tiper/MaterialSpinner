@@ -1,3 +1,8 @@
 <resources>
-    <string name="app_name">MaterialSpinner</string>
+    <string name="app_name" translatable="false">MaterialSpinner</string>
+    <string name="materialspinner">Material Spinner</string>
+    <string name="materialspinner_1">Material Spinner 1</string>
+    <string name="materialspinner_2">Material Spinner 2</string>
+    <string name="materialspinner_3">Material Spinner 3</string>
+    <string name="error">I am an error</string>
 </resources>
