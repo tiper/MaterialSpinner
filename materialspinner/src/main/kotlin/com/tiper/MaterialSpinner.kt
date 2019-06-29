@@ -343,6 +343,20 @@ open class MaterialSpinner @JvmOverloads constructor(
         super.onRtlPropertiesChanged(layoutDirection)
     }
 
+    override fun setError(errorText: CharSequence?) {
+        super.setError(errorText)
+        if (Build.VERSION.SDK_INT < Build.VERSION_CODES.JELLY_BEAN_MR2) {
+            findViewById<TextView>(R.id.textinput_error)?.let { errorView ->
+                errorView.gravity = editText.gravity
+                when (val p = errorView.parent) {
+                    is View -> {
+                        p.layoutParams.width = ViewGroup.LayoutParams.MATCH_PARENT
+                    }
+                }
+            }
+        }
+    }
+
     /**
      * Call the OnItemClickListener, if it is defined.
      * Performs all normal actions associated with clicking: reporting accessibility event, playing
