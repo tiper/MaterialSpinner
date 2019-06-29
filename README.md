@@ -39,6 +39,7 @@ dependencies {
 
 ## Features
 - Quick way to select a value from a list.
+- Support for having no value selected or clearing it.
 - Styling and theming just like for [TextInputLayout](https://developer.android.com/reference/android/support/design/widget/TextInputLayout).
 - Showing a hint.
 - Showing an error.
