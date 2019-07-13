@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.3.2 *(2019-07-13)*
+----------------------------
+* Fix: Align drawable with hint for new Material 1.1.0-alphaXX.
+
 Version 1.3.1 *(2019-06-29)*
 ----------------------------
 * Fix: Added fix for error view incorrect position in pre API 18.

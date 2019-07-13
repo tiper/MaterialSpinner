@@ -278,6 +278,7 @@ open class MaterialSpinner @JvmOverloads constructor(
     }
 
     fun setDrawable(drawable: Drawable?, applyTint: Boolean = true) {
+        val delta = (editText.paddingBottom - editText.paddingTop) / 2
         drawable?.let { DrawableCompat.wrap(drawable) }?.apply {
             setBounds(0, 0, intrinsicWidth, intrinsicHeight)
             if (applyTint) {
@@ -292,6 +293,15 @@ open class MaterialSpinner @JvmOverloads constructor(
             }
         }.let { (left, right) ->
             editText.setCompoundDrawablesWithIntrinsicBounds(left, null, right, null)
+            editText.compoundDrawables.forEach {
+                it?.run {
+                    bounds = copyBounds().apply {
+                        top += delta
+                        bottom += delta
+
+                    }
+                }
+            }
         }
     }
 
