@@ -10,15 +10,15 @@ import android.database.DataSetObserver
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
-import android.support.annotation.DrawableRes
-import android.support.design.widget.BottomSheetDialog
-import android.support.design.widget.TextInputEditText
-import android.support.design.widget.TextInputLayout
-import android.support.v4.content.res.ResourcesCompat
-import android.support.v4.graphics.drawable.DrawableCompat
-import android.support.v4.text.TextUtilsCompat
-import android.support.v4.view.ViewCompat
-import android.support.v7.widget.ListPopupWindow
+import androidx.annotation.DrawableRes
+import com.google.android.material.bottomsheet.BottomSheetDialog
+import com.google.android.material.textfield.TextInputEditText
+import com.google.android.material.textfield.TextInputLayout
+import androidx.core.content.res.ResourcesCompat
+import androidx.core.graphics.drawable.DrawableCompat
+import androidx.core.text.TextUtilsCompat
+import androidx.core.view.ViewCompat
+import androidx.appcompat.widget.ListPopupWindow
 import android.text.InputType
 import android.util.AttributeSet
 import android.view.Gravity
@@ -655,7 +655,7 @@ open class MaterialSpinner @JvmOverloads constructor(
 
             dropDownTheme?.let {
                 when (adapter) {
-                    is android.support.v7.widget.ThemedSpinnerAdapter -> {
+                    is androidx.appcompat.widget.ThemedSpinnerAdapter -> {
                         if (adapter.dropDownViewTheme != it) {
                             adapter.dropDownViewTheme = it
                         }

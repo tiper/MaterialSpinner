@@ -120,7 +120,7 @@
             android:prompt="@string/app_name"
             android:spinnerMode="dialog" />
 
-        <android.support.v7.widget.AppCompatSpinner
+        <androidx.appcompat.widget.AppCompatSpinner
             android:id="@+id/appCompatSpinner"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
