@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.3.3 *(2019-08-13)*
+----------------------------
+* Fix: Save and restore instance state.
+
 Version 1.3.2 *(2019-07-13)*
 ----------------------------
 * Fix: Align drawable with hint for new Material 1.1.0-alphaXX.

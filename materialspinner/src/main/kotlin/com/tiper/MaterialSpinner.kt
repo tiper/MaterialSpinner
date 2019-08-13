@@ -10,6 +10,8 @@ import android.database.DataSetObserver
 import android.graphics.PorterDuff
 import android.graphics.drawable.Drawable
 import android.os.Build
+import android.os.Parcel
+import android.os.Parcelable
 import android.support.annotation.DrawableRes
 import android.support.design.widget.BottomSheetDialog
 import android.support.design.widget.TextInputEditText
@@ -17,6 +19,7 @@ import android.support.design.widget.TextInputLayout
 import android.support.v4.content.res.ResourcesCompat
 import android.support.v4.graphics.drawable.DrawableCompat
 import android.support.v4.text.TextUtilsCompat
+import android.support.v4.view.AbsSavedState
 import android.support.v4.view.ViewCompat
 import android.support.v7.widget.ListPopupWindow
 import android.text.InputType
@@ -26,10 +29,15 @@ import android.view.SoundEffectConstants
 import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
+import android.view.ViewTreeObserver
 import android.view.accessibility.AccessibilityEvent
-import android.widget.*
+import android.widget.ListAdapter
+import android.widget.ListView
+import android.widget.SpinnerAdapter
+import android.widget.AdapterView
+import android.widget.TextView
 import com.tiper.materialspinner.R
-import java.util.*
+import java.util.Locale
 
 /**
  * Layout which wraps an [TextInputEditText] to show a floating label when the hint is hidden due to
@@ -105,7 +113,8 @@ open class MaterialSpinner @JvmOverloads constructor(
      * {@link #LAYOUT_DIRECTION_RTL} if the layout direction is RTL.
      * {@link #LAYOUT_DIRECTION_LTR} if the layout direction is not RTL.
      */
-    private var direction = if (isLayoutRtl()) ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR
+    private var direction =
+        if (isLayoutRtl()) ViewCompat.LAYOUT_DIRECTION_RTL else ViewCompat.LAYOUT_DIRECTION_LTR
 
     /**
      * The currently selected item.
@@ -199,8 +208,10 @@ open class MaterialSpinner @JvmOverloads constructor(
                 if (isInEditMode) {
                     editText.setText(it)
                 } else {
-                    throw RuntimeException("Don't set text directly." +
-                            "You probably want setSelection instead.")
+                    throw RuntimeException(
+                        "Don't set text directly." +
+                                "You probably want setSelection instead."
+                    )
                 }
             }
             popup = when (getInt(R.styleable.MaterialSpinner_spinnerMode, mode)) {
@@ -298,7 +309,6 @@ open class MaterialSpinner @JvmOverloads constructor(
                     bounds = copyBounds().apply {
                         top += delta
                         bottom += delta
-
                     }
                 }
             }
@@ -306,7 +316,8 @@ open class MaterialSpinner @JvmOverloads constructor(
     }
 
     override fun setOnClickListener(l: OnClickListener?) {
-        throw RuntimeException("Don't call setOnClickListener." +
+        throw RuntimeException(
+            "Don't call setOnClickListener." +
                     "You probably want setOnItemClickListener instead."
         )
     }
@@ -397,6 +408,39 @@ open class MaterialSpinner @JvmOverloads constructor(
      */
     fun setPromptId(promptId: Int) {
         prompt = context.getText(promptId)
+    }
+
+    @Suppress("NULLABILITY_MISMATCH_BASED_ON_JAVA_ANNOTATIONS")
+    override fun onSaveInstanceState(): Parcelable? {
+        return SavedState(super.onSaveInstanceState()).apply {
+            this.selection = this@MaterialSpinner.selection
+            this.isShowingPopup = this@MaterialSpinner.popup.isShowing()
+        }
+    }
+
+    override fun onRestoreInstanceState(state: Parcelable?) {
+        when (state) {
+            is SavedState -> {
+                super.onRestoreInstanceState(state.superState)
+                selection = state.selection
+                if (state.isShowingPopup) {
+                    viewTreeObserver?.addOnGlobalLayoutListener(object :
+                        ViewTreeObserver.OnGlobalLayoutListener {
+                        override fun onGlobalLayout() {
+                            if (!popup.isShowing()) {
+                                requestFocus()
+                            }
+                            if (Build.VERSION.SDK_INT > Build.VERSION_CODES.ICE_CREAM_SANDWICH_MR1) {
+                                viewTreeObserver?.removeOnGlobalLayoutListener(this)
+                            } else {
+                                viewTreeObserver?.removeGlobalOnLayoutListener(this)
+                            }
+                        }
+                    })
+                }
+            }
+            else -> super.onRestoreInstanceState(state)
+        }
     }
 
     /**
@@ -501,6 +545,8 @@ open class MaterialSpinner @JvmOverloads constructor(
         override fun getItemId(position: Int): Long {
             return adapter?.getItemId(position) ?: INVALID_POSITION.toLong()
         }
+
+        override fun isShowing() = popup?.isShowing == true
     }
 
     /**
@@ -630,6 +676,8 @@ open class MaterialSpinner @JvmOverloads constructor(
         override fun getItemId(position: Int): Long {
             return adapter?.getItemId(position) ?: INVALID_POSITION.toLong()
         }
+
+        override fun isShowing() = popup?.isShowing == true
     }
 
     /**
@@ -663,7 +711,7 @@ open class MaterialSpinner @JvmOverloads constructor(
                     else -> {
                         if (Build.VERSION.SDK_INT > Build.VERSION_CODES.LOLLIPOP_MR1) {
                             when (adapter) {
-                                is ThemedSpinnerAdapter -> {
+                                is android.widget.ThemedSpinnerAdapter -> {
                                     if (adapter.dropDownViewTheme == null) {
                                         adapter.dropDownViewTheme = it
                                     }
@@ -852,5 +900,53 @@ open class MaterialSpinner @JvmOverloads constructor(
          * @return The id of the item at the specified position.
          */
         fun getItemId(position: Int): Long
+
+        /**
+         * @return true if the popup is showing, false otherwise.
+         */
+        fun isShowing(): Boolean
+    }
+
+    internal class SavedState : AbsSavedState {
+        var selection: Int = INVALID_POSITION
+        var isShowingPopup: Boolean = false
+
+        constructor(superState: Parcelable) : super(superState)
+
+        constructor(source: Parcel, loader: ClassLoader?) : super(source, loader) {
+            selection = source.readInt()
+            isShowingPopup = source.readByte().toInt() != 0
+        }
+
+        override fun writeToParcel(dest: Parcel, flags: Int) {
+            super.writeToParcel(dest, flags)
+            dest.writeInt(selection)
+            dest.writeByte((if (isShowingPopup) 1 else 0).toByte())
+        }
+
+        override fun toString(): String {
+            return ("MaterialSpinner.SavedState{" +
+                    Integer.toHexString(System.identityHashCode(this)) +
+                    " selection=" +
+                    selection +
+                    ", isShowingPopup=" +
+                    isShowingPopup +
+                    "}")
+        }
+
+        companion object CREATOR : Parcelable.ClassLoaderCreator<SavedState> {
+
+            override fun createFromParcel(parcel: Parcel): SavedState {
+                return SavedState(parcel, null)
+            }
+
+            override fun createFromParcel(parcel: Parcel, loader: ClassLoader): SavedState {
+                return SavedState(parcel, loader)
+            }
+
+            override fun newArray(size: Int): Array<SavedState?> {
+                return arrayOfNulls(size)
+            }
+        }
     }
 }
