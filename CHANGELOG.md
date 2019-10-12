@@ -1,6 +1,10 @@
 Change Log
 ==========
 
+Version 1.4.0 *(2019-08-13)*
+----------------------------
+* Feature: Add support for onFocusChangeListener callback.
+
 Version 1.3.3 *(2019-08-13)*
 ----------------------------
 * Fix: Save and restore instance state.

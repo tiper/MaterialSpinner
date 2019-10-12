@@ -283,6 +283,7 @@ open class MaterialSpinner @JvmOverloads constructor(
                         v.performClick()
                     }
                     it?.onFocusChange(v, hasFocus)
+                    onFocusChangeListener?.onFocusChange(this, hasFocus)
                 }
             }
         }

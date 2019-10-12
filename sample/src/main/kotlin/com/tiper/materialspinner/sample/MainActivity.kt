@@ -34,6 +34,9 @@ class MainActivity : AppCompatActivity() {
             material_spinner_1.apply {
                 adapter = it
                 onItemSelectedListener = listener
+                onFocusChangeListener = View.OnFocusChangeListener { v, hasFocus ->
+                    Log.v("MaterialSpinner", "onFocusChange hasFocus=$hasFocus")
+                }
             }
             material_spinner_2.apply {
                 adapter = it

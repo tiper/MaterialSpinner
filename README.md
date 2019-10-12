@@ -34,8 +34,11 @@ Then, add the library to your module `build.gradle`
 ```gradle
 dependencies {
     implementation 'com.github.tiper:MaterialSpinner:latest.release.here'
+    implementation 'com.android.support:design:android.design.version.here'
 }
 ```
+
+If your using the [Material Components for Android](https://github.com/material-components/material-components-android), make sure you have `android.useAndroidX=true` and `android.enableJetifier=true` in your _gradle.properties_ file!
 
 ## Features
 - Quick way to select a value from a list.
