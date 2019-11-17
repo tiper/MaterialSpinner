@@ -124,12 +124,16 @@ open class MaterialSpinner @JvmOverloads constructor(
             field = value
             adapter?.apply {
                 if (value in 0 until count) {
-                    editText.setText(
-                        when (val item = getItem(value)) {
+                    val item = getItem(value)
+                    if (item != null) {
+                        val str = when (item) {
                             is CharSequence -> item
                             else -> item.toString()
                         }
-                    )
+                        editText.setText(str)
+                    } else {
+                        editText.text = null
+                    }
                     onItemSelectedListener?.onItemSelected(
                         this@MaterialSpinner,
                         null,
