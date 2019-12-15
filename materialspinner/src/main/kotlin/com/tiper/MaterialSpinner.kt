@@ -278,7 +278,7 @@ open class MaterialSpinner @JvmOverloads constructor(
 
         editText.onFocusChangeListener.let {
             editText.onFocusChangeListener = OnFocusChangeListener { v, hasFocus ->
-                v.handler.post {
+                v.handler?.post {
                     if (hasFocus) {
                         v.performClick()
                     }
