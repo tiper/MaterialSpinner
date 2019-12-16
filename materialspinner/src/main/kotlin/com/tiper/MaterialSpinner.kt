@@ -444,6 +444,13 @@ open class MaterialSpinner @JvmOverloads constructor(
         }
     }
 
+    override fun onDetachedFromWindow() {
+        super.onDetachedFromWindow()
+        if (popup.isShowing()) {
+            popup.dismiss()
+        }
+    }
+
     /**
      * Returns if this view layout should be in a RTL direction.
      * @return True if is RTL, false otherwise .
@@ -525,6 +532,10 @@ open class MaterialSpinner @JvmOverloads constructor(
                     it.show()
                 }
             }
+        }
+
+        override fun dismiss() {
+            popup?.dismiss()
         }
 
         override fun onClick(dialog: DialogInterface, which: Int) {
@@ -664,6 +675,10 @@ open class MaterialSpinner @JvmOverloads constructor(
             }.also {
                 it.show()
             }
+        }
+
+        override fun dismiss() {
+            popup?.dismiss()
         }
 
         override fun setOnDismissListener(listener: SpinnerPopup.OnDismissListener?) {
@@ -879,6 +894,11 @@ open class MaterialSpinner @JvmOverloads constructor(
         fun show(position: Int)
 
         /**
+         * Dismiss the popup
+         */
+        fun dismiss()
+
+        /**
          * Set a listener to receive a callback when the popup is dismissed.
          *
          * @param [listener] Listener that will be notified when the popup is dismissed.
@@ -906,6 +926,8 @@ open class MaterialSpinner @JvmOverloads constructor(
          * @return true if the popup is showing, false otherwise.
          */
         fun isShowing(): Boolean
+
+
     }
 
     internal class SavedState : AbsSavedState {
