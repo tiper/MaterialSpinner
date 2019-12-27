@@ -1,6 +1,12 @@
 Change Log
 ==========
 
+Version 1.4.1 *(2019-12-27)*
+----------------------------
+* Fix: Issue where toString was not invoked for null items.
+* Fix: Dismiss popup when view is detached from window.
+* Fix: Crash when using null handler.
+
 Version 1.4.0 *(2019-08-13)*
 ----------------------------
 * Feature: Add support for onFocusChangeListener callback.
