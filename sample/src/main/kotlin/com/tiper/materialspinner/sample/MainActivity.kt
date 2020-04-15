@@ -60,17 +60,26 @@ class MainActivity : AppCompatActivity() {
         b1_error.setOnClickListener {
             material_spinner_1.onClick()
         }
+        b1_click.setOnClickListener {
+            material_spinner_1.performClick()
+        }
         b2_clear.setOnClickListener {
             material_spinner_2.selection = ListView.INVALID_POSITION
         }
         b2_error.setOnClickListener {
             material_spinner_2.onClick()
         }
+        b2_click.setOnClickListener {
+            material_spinner_2.performClick()
+        }
         b3_clear.setOnClickListener {
             material_spinner_3.selection = ListView.INVALID_POSITION
         }
         b3_error.setOnClickListener {
             material_spinner_3.onClick()
+        }
+        b3_click.setOnClickListener {
+            material_spinner_3.performClick()
         }
     }
 

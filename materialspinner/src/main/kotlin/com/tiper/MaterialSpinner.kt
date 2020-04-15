@@ -30,11 +30,12 @@ import android.view.View
 import android.view.View.OnFocusChangeListener
 import android.view.ViewGroup
 import android.view.ViewTreeObserver
+import android.view.WindowManager
 import android.view.accessibility.AccessibilityEvent
+import android.widget.AdapterView
 import android.widget.ListAdapter
 import android.widget.ListView
 import android.widget.SpinnerAdapter
-import android.widget.AdapterView
 import android.widget.TextView
 import com.tiper.materialspinner.R
 import java.util.Locale
@@ -271,6 +272,7 @@ open class MaterialSpinner @JvmOverloads constructor(
         // Disable input.
         editText.maxLines = 1
         editText.inputType = InputType.TYPE_NULL
+        editText.imeOptions = WindowManager.LayoutParams.SOFT_INPUT_STATE_ALWAYS_HIDDEN
 
         editText.setOnClickListener {
             popup.show(selection)
@@ -377,6 +379,11 @@ open class MaterialSpinner @JvmOverloads constructor(
                 }
             }
         }
+    }
+
+    @SuppressLint("ClickableViewAccessibility")
+    override fun performClick(): Boolean {
+        return requestFocus()
     }
 
     /**
@@ -575,6 +582,7 @@ open class MaterialSpinner @JvmOverloads constructor(
             promptPosition = POSITION_PROMPT_ABOVE
             setOverlapAnchor(false)
 
+            @Suppress("UNUSED_ANONYMOUS_PARAMETER")
             setOnItemClickListener { parent, v, position, id ->
                 this@MaterialSpinner.selection = position
                 onItemClickListener?.let {
@@ -654,6 +662,7 @@ open class MaterialSpinner @JvmOverloads constructor(
                 setContentView(ListView(context).apply {
                     adapter = this@BottomSheetPopup.adapter
 
+                    @Suppress("UNUSED_ANONYMOUS_PARAMETER")
                     onItemClickListener =
                         AdapterView.OnItemClickListener { parent, v, position, id ->
                             this@MaterialSpinner.selection = position
@@ -948,13 +957,13 @@ open class MaterialSpinner @JvmOverloads constructor(
         }
 
         override fun toString(): String {
-            return ("MaterialSpinner.SavedState{" +
+            return "MaterialSpinner.SavedState{" +
                     Integer.toHexString(System.identityHashCode(this)) +
                     " selection=" +
                     selection +
                     ", isShowingPopup=" +
                     isShowingPopup +
-                    "}")
+                    "}"
         }
 
         companion object CREATOR : Parcelable.ClassLoaderCreator<SavedState> {

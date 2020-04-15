@@ -32,8 +32,17 @@
                 android:id="@+id/b1_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="error" />
+
+            <Button
+                android:id="@+id/b1_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="click" />
         </FrameLayout>
 
         <com.tiper.MaterialSpinner
@@ -62,8 +71,17 @@
                 android:id="@+id/b2_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="error" />
+
+            <Button
+                android:id="@+id/b2_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="click" />
         </FrameLayout>
 
         <com.tiper.MaterialSpinner
@@ -97,8 +115,17 @@
                 android:id="@+id/b3_error"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_gravity="end"
+                android:layout_gravity="center"
+                android:focusable="true"
+                android:focusableInTouchMode="true"
                 android:text="error" />
+
+            <Button
+                android:id="@+id/b3_click"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_gravity="end"
+                android:text="click" />
         </FrameLayout>
 
         <com.tiper.MaterialSpinner
@@ -106,8 +133,8 @@
             style="@style/AppTheme.Widget.Design.TextInputLayout"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/materialspinner_3"
             android:gravity="left"
+            android:hint="@string/materialspinner_3"
             android:prompt="@string/materialspinner"
             app:spinnerMode="dialog"
             app:srcCompat="@drawable/ic_selector_drawable" />

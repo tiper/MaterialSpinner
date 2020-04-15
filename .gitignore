@@ -6,6 +6,7 @@
 /build
 /captures
 .externalNativeBuild
+.cxx
 # MaterialSpinner
 
 # Built application files
@@ -45,6 +46,8 @@ captures/
 # IntelliJ
 *.iml
 .idea/workspace.xml
+.idea/navEditor.xml
+# .idea/modules.xml
 .idea/tasks.xml
 .idea/gradle.xml
 .idea/assetWizardSettings.xml
